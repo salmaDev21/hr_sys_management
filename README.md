@@ -1,1 +1,3 @@
-- HTMX cote frontend   CDN
+
+# hr_sys_management
+hr management system for absence management
