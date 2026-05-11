@@ -1,0 +1,1 @@
+- HTMX cote frontend   CDN

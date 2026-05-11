@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'dist/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <title>{% block title %}HR Management {% endblock %}</title>
+</head>
+<body class="bg-gray-100 ">
+
+    <nav class="bg-white flex items-center justify-between px-4 py-2">
+
+        <img class="w-16" src="{% static 'images/logo2.png' %}" alt="">
+
+        <!-- Account Icon -->
+        <div class="bg-blue-900 rounded-full p-2 w-10 h-10 flex items-center justify-center cursor-pointer">
+        <i class="fa-solid fa-user text-xl text-white"></i>
+        </div>
+
+    </nav>
+
+{% block content %}
+{% endblock %}
+
+
+    
+</body>
+</html>

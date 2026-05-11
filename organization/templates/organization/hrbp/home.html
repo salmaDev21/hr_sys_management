@@ -1,0 +1,6 @@
+<h1>hello {{ user.get_full_name }}</h1>
+<p>your role is :{{user.role}}</p>
+ <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Se déconnecter</button>
+ </form>

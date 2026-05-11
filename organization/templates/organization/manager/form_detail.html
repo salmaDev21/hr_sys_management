@@ -1,0 +1,249 @@
+{% extends 'organization/base.html' %}
+
+{% block content %}
+<div class="h-full p-10 md:p-20">
+    
+    <div class="mb-6">
+        <a href="{% url 'manager_dashboard' %}" 
+           class="inline-flex items-center gap-2 text-slate-600 hover:text-blue-900 transition-colors duration-200">
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+            <span class="font-medium">Retour au tableau de bord</span>
+        </a>   
+    </div> 
+
+    <div class="flex justify-between items-start mb-8">
+        <div>
+            <h3 class="text-2xl text-slate-700 font-bold md:text-4xl">Détails du formulaire d'entretien</h3>
+            <p class="text-slate-500 mt-1">Référence: #{{ form.id }}</p>
+        </div>
+        <div class="flex flex-col justify-center items-center">
+            <h3 class="text-xl text-slate-700 font-bold">{{ form.created_at|date:"Y-m-d" }}</h3>
+            <p class="text-slate-500">Date de soumission</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-user text-blue-900"></i>
+                Informations du collaborateur
+            </h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Nom :</span>
+                <span class="text-slate-600">{{ form.collaborateur.first_name }}</span>
+            </div> 
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Prénom :</span>
+                <span class="text-slate-600">{{ form.collaborateur.family_name }}</span>
+            </div>    
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">ID :</span>
+                <span class="text-slate-600">{{ form.collaborateur.corporate_id }}</span>
+            </div>     
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Matricule :</span>
+                <span class="text-slate-600">{{ form.collaborateur.matricule }}</span>
+            </div>      
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Département :</span>
+                <span class="text-slate-600">{{ form.collaborateur.poste.uep.dpt.name }}</span>
+            </div>    
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Poste :</span>
+                <span class="text-slate-600">{{ form.collaborateur.poste }}</span>
+            </div> 
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">Nom du manager :</span>
+                <span class="text-slate-600">{{ form.collaborateur.poste.uep.manager }}</span>
+            </div> 
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-32">RH / HRBP :</span>
+                <span class="text-slate-600">{{ form.collaborateur.poste.uep.dpt.hrbp }}</span>
+            </div> 
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-alt text-blue-900"></i>
+                Détails de l'absence
+            </h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-36">Absence du :</span>
+                <span class="text-slate-600">{{ form.date_absence_debut }}</span>
+            </div> 
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-36">Absence au :</span>
+                <span class="text-slate-600">{{ form.date_absence_fin }}</span>
+            </div> 
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-blue-900"></i>
+                Classification et analyse de l'absence
+            </h2>
+        </div>
+        <div class="space-y-3 text-sm text-gray-600 px-6 py-6">
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-40">Type d'absence :</span>
+                <span class="text-slate-600">{{ form.type_absence }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-40">Motif de l'absence :</span>
+                <span class="text-slate-600">{{ form.reason }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-40">Absence répétitive :</span>
+                <span class="text-slate-600">{{ form.is_repetitive|yesno:"Oui,Non" }}</span>
+            </div>
+            {% if form.is_repetitive %}
+            <div class="flex items-center gap-2">
+                <span class="font-semibold text-slate-700 w-40">Fréquence :</span>
+                <span class="text-slate-600">{{ form.frequency }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-exclamation-triangle text-blue-900"></i>
+                Conséquences durant la période d'absence
+            </h2>
+        </div>
+        <div class="px-6 py-6">
+            <div class="space-y-2">
+                {% if form.cons_reorganization %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Réorganisation de l'équipe</span>
+                </div>
+                {% endif %}
+                {% if form.cons_recruitment %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Recrutement</span>
+                </div>
+                {% endif %}
+                {% if form.cons_departure %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Départ de collaborateurs</span>
+                </div>
+                {% endif %}
+                {% if form.cons_other %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Autres : {{ form.cons_other_details }}</span>
+                </div>
+                {% endif %}
+                {% if not form.cons_reorganization and not form.cons_recruitment and not form.cons_departure and not form.cons_other %}
+                <p class="text-sm text-slate-500 italic">Aucune conséquence signalée</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-tasks text-blue-900"></i>
+                Actions et mesures correctives
+            </h2>
+        </div>
+        <div class="px-6 py-6">
+            <div class="space-y-2">
+                {% if form.action_adjustment %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Aménagement du temps de travail</span>
+                </div>
+                {% endif %}
+                {% if form.action_training %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Formation et tutorat</span>
+                </div>
+                {% endif %}
+                {% if form.action_reassignment %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Réaffectation à un autre poste</span>
+                </div>
+                {% endif %}
+                {% if form.action_deskilling %}
+                <div class="flex items-center gap-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-check-circle text-green-600"></i>
+                    <span>Déshabilitation si nouvelles opérations</span>
+                </div>
+                {% endif %}
+                {% if form.new_missions %}
+                <div class="mt-3 flex items-start gap-2 text-sm text-slate-600">
+                    <span class="font-semibold text-slate-700">Nouvelles missions :</span>
+                    <span>{{ form.new_missions }}</span>
+                </div>
+                {% endif %}
+                {% if not form.action_adjustment and not form.action_training and not form.action_reassignment and not form.action_deskilling %}
+                <p class="text-sm text-slate-500 italic">Aucune action signalée</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-100">
+            <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-file-signature text-blue-900"></i>
+                Conclusion de l'entretien
+            </h2>
+        </div>
+                
+
+                        <div class="px-6 py-6">
+                            {% if form.medical_visit_required %}
+                            <div class="flex items-center gap-2 text-sm text-slate-600">
+                                <i class="fa-solid fa-xmark-circle text-red-600"></i>
+                                <span>Visite médicale requise</span>
+                             </div>
+                              
+                            {% endif %}
+
+                            {% if form.direct_return %}
+                                 <i class="fa-solid fa-check-circle text-green-600"></i>
+                                <span>Reprise directe du travail</span>
+                               
+                            {% endif %}
+                        </div>
+                
+               
+                
+                
+           
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6 px-6 py-6">
+        <div class="flex items-center gap-2 text-sm">
+                    <span class="font-semibold text-slate-700 w-40">Entretien enregistré le :</span>
+                    <span class="text-slate-600">{{ form.created_at }}</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm">
+                    <span class="font-semibold text-slate-700 w-40">Par :</span>
+                    <span class="text-slate-600">{{ form.created_by }}</span>
+        </div>
+       
+        
+    </div>
+
+   
+
+</div>
+{% endblock %}

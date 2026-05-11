@@ -1,0 +1,212 @@
+{% extends 'organization/base.html' %}
+{% block content %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <div class="p-10">
+        <div class="mb-6">
+            <a href="{% url 'manager_dashboard' %}" 
+            class="inline-flex items-center gap-2 text-slate-600 hover:text-blue-900 transition-colors duration-200">
+                <i class="fa-solid fa-arrow-left text-sm"></i>
+                <span class="font-medium">Retour au tableau de bord</span>
+            </a>   
+        </div> 
+
+        <div class="flex justify-between items-start mb-8">
+                <h3 class="text-2xl text-slate-700 font-bold md:text-4xl">Ajouter une formulaire d'entretien</h3>
+            
+        </div>
+
+
+
+
+
+        <form method="POST" >
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-user text-blue-900"></i>
+                        Sélection du collaborateur
+                    </h2>
+                </div>
+
+                <div class="p-6">
+                    <label class="text-sm font-medium text-slate-600">Collaborateur</label>
+
+                    <select id="collab-select" name="collaborateur"
+                        class="w-full mt-2 p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900">
+                        <option value="">-- Choisir --</option>
+                        {% for coll in collaborateurs %}
+                            <option value="{{ coll.id }}" data-corp="{{ coll.corporate_id }}">
+                                {{ coll.first_name }} {{ coll.family_name }} - {{ coll.matricule }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+             </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-blue-900"></i>
+                        Informations Collaborateur
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">ID Corporate :</span>
+                       <input type="text" id="info-corporate-id" readonly placeholder="ID Corporate">
+                    </div> 
+                     <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">Matricule :</span>
+                        <input type="text" id="info-matricule" readonly placeholder="Matricule">
+                    </div> 
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">Manager :</span>
+                        <input type="text" id="info-manager" readonly placeholder="Manager">
+                    </div> 
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">Département :</span>
+                        <input type="text" id="info-dept" readonly placeholder="Département">
+                    </div> 
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">Poste :</span>
+                        <input type="text" id="info-poste" readonly placeholder="Poste">
+                    </div> 
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-slate-700 w-32">HRBP :</span>
+                        <input type="text" id="info-hrbp" readonly placeholder="HRBP">
+                    </div> 
+                    
+                    
+                   
+                    
+                    
+                   
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-alt text-blue-900"></i>
+                        Détails de l'absence
+                    </h2>
+                </div>
+
+                
+            <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+                <div>
+                    <label class="font-semibold text-slate-700 w-32">Du:</label>
+                    {{ form.date_absence_debut }}
+                </div>
+                <div>
+                    <label class="font-semibold text-slate-700 w-32">Au:</label>
+                    {{ form.date_absence_fin }}
+                    {% if orm.date_absence_fin.errors %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded m-4">
+                        {{ form.date_absence_fin.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+                    <label class="font-semibold text-slate-700 w-32">Type:</label>
+                    {{ form.type_absence }}
+                </div>
+
+                
+                <label>Raison:</label> {{ form.reason }}
+                <p class="text-red-500 text-sm">{{ form.reason.errors }}</p>
+
+                <label>Absence répétitive ?</label> {{ form.is_repetitive }}
+                
+                <div id="frequency_div" style="display: none;">
+                    <label>Fréquence:</label> {{ form.frequency }}
+                    <p class="text-red-500 text-sm">{{ form.frequency.errors }}</p>
+                </div>
+            </div>
+            </div>
+
+            <fieldset>
+                <legend>Conséquences de l'absence</legend>
+                {{ form.cons_reorganization }} Réorganisation<br>
+                {{ form.cons_recruitment }} Recrutement<br>
+                {{ form.cons_departure }} Départ<br>
+                {{ form.cons_other }} Autres<br>
+                <div id="autre_div" style="display: none;" >
+                    {{ form.cons_other_details }}
+                    <p class="text-red-500 text-sm">{{ form.cons_other_details.errors }}</p>
+                </div>
+            </fieldset>
+                
+            
+
+            <fieldset>
+                <legend>Mesures prises</legend>
+                {{ form.action_adjustment }} Aménagement<br>
+                {{ form.action_training }} Formation<br>
+                {{ form.action_reassignment }} Réaffectation<br>
+                {{ form.action_deskilling }} Déshabilitation<br>
+                {{ form.new_missions }}
+            </fieldset>
+
+            <fieldset>
+                <legend>Décision de reprise</legend>
+                {{ form.decision_reprise }}
+                <p class="text-red-500 text-sm">{{ form.decision_reprise.errors }}</p>
+            </fieldset>
+            
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer la reprise</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    </div>
+<script>
+$(document).ready(function() {
+    $('#collab-select').select2({
+        placeholder: "Rechercher un collaborateur..."
+    });
+
+    $('#collab-select').on('change', function() {
+        const selectedOption = $(this).find(':selected');
+        const corpId = selectedOption.data('corp');
+        
+        if (!corpId) return;
+
+        fetch(`/org/manager/get-collab-info/${corpId}/`)
+            .then(r => r.json())
+            .then(data => {
+                $('#info-corporate-id').val(data.corporate_id);
+                $('#info-matricule').val(data.matricule);
+                $('#info-manager').val(data.manager);
+                $('#info-dept').val(data.departement);
+                $('#info-poste').val(data.poste_title);
+                $('#info-hrbp').val(data.hrbp);
+            });
+    });
+
+    $('#id_is_repetitive').on('change', function() {
+        $('#frequency_div').toggle(this.checked);
+    });
+
+    $('#id_cons_other').on('change', function() {
+        $('#autre_div').toggle(this.checked);
+    });
+});
+</script>
+{% endblock %}
