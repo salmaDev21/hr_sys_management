@@ -26,9 +26,23 @@
         <form method="POST" >
             {% csrf_token %}
             
-            {% if form.non_field_errors %}
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {{ form.non_field_errors }}
+            {% if form.errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">
+                    <ul class="list-disc list-inside text-sm">
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% for field in form %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                 </div>
             {% endif %}
 
@@ -114,12 +128,6 @@
                 <div>
                     <label class="font-semibold text-slate-700 w-32">Au:</label>
                     {{ form.date_absence_fin }}
-                    {% if orm.date_absence_fin.errors %}
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded m-4">
-                        {{ form.date_absence_fin.errors }}
-                    </div>
-                    {% endif %}
-
                 </div>
 
 
@@ -130,47 +138,72 @@
 
                 
                 <label>Raison:</label> {{ form.reason }}
-                <p class="text-red-500 text-sm">{{ form.reason.errors }}</p>
 
                 <label>Absence répétitive ?</label> {{ form.is_repetitive }}
                 
                 <div id="frequency_div" style="display: none;">
                     <label>Fréquence:</label> {{ form.frequency }}
-                    <p class="text-red-500 text-sm">{{ form.frequency.errors }}</p>
                 </div>
             </div>
             </div>
 
-            <fieldset>
-                <legend>Conséquences de l'absence</legend>
-                {{ form.cons_reorganization }} Réorganisation<br>
-                {{ form.cons_recruitment }} Recrutement<br>
-                {{ form.cons_departure }} Départ<br>
-                {{ form.cons_other }} Autres<br>
-                <div id="autre_div" style="display: none;" >
-                    {{ form.cons_other_details }}
-                    <p class="text-red-500 text-sm">{{ form.cons_other_details.errors }}</p>
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-alt text-blue-900"></i>
+                        Conséquences de l'absence
+                    </h2>
                 </div>
-            </fieldset>
+
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+                    <div>{{ form.cons_reorganization }} Réorganisation</div>
+                    <div>{{ form.cons_recruitment }} Recrutement</div>
+                    <div>{{ form.cons_departure }} Départ</div>
+                    <div>{{ form.cons_other }} Autres
+                        <div id="autre_div" style="display: none;" >
+                            {{ form.cons_other_details }}
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
                 
             
 
-            <fieldset>
-                <legend>Mesures prises</legend>
-                {{ form.action_adjustment }} Aménagement<br>
-                {{ form.action_training }} Formation<br>
-                {{ form.action_reassignment }} Réaffectation<br>
-                {{ form.action_deskilling }} Déshabilitation<br>
-                {{ form.new_missions }}
-            </fieldset>
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-alt text-blue-900"></i>
+                        Mesures prises
+                    </h2>
+                </div>
 
-            <fieldset>
-                <legend>Décision de reprise</legend>
-                {{ form.decision_reprise }}
-                <p class="text-red-500 text-sm">{{ form.decision_reprise.errors }}</p>
-            </fieldset>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+                    <div>{{ form.action_adjustment }} Aménagement</div>
+                    <div>{{ form.action_training }} Formation</div>
+                    <div>{{ form.action_reassignment }} Réaffectation</div>
+                    <div>{{ form.action_deskilling }} Déshabilitation</div>
+                    <div>{{ form.new_missions }}</div>
+                </div>
+
+
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-slate-50 to-indigo-50/30 px-6 py-4 border-b-2 border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-alt text-blue-900"></i>
+                        Décision de reprise
+                    </h2>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 px-6 py-6">
+                    {{ form.decision_reprise }}
+                </div>
+            </div>
             
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer la reprise</button>
+            <button type="submit" class="bg-blue-900 hover:bg-blue-950 rounded-xl text-white px-4 py-2 ">Enregistrer la reprise</button>
         </form>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

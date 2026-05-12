@@ -55,48 +55,45 @@ Manager Home
     {% endfor %}
 {% endif %}
 
-   <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+   <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
 
-    <div class="max-h-125  overflow-x-auto overflow-y-auto w-full">
+    <div class="overflow-x-auto overflow-y-auto w-full flex-1">
 
-        <table class="w-full min-w-175">
+        <table class="w-full min-w-full border-separate border-spacing-0">
 
-            <thead>
-                <tr class="bg-linear-to from-slate-50 to-indigo-50/30 border-b-2 border-slate-100 text-slate-700">
-
-                    <th class="p-3 text-left">ID</th>
-                    <th class="p-3 text-left">ID-Collaborateur</th>
-
-                    <th class="p-3 text-left">Full name</th>
-                    <th class="p-3 text-left">Type</th>
-                    <th class="p-3 text-left">Date</th>
-                    <th class="p-3 text-center" colspan="3">Actions</th>
-
+            <thead class="sticky top-0 z-10 bg-slate-50">
+                <tr class="text-slate-700">
+                    <th class="p-4 text-left font-semibold border-b-2 border-slate-100">ID</th>
+                    <th class="p-4 text-left font-semibold border-b-2 border-slate-100">ID-Collaborateur</th>
+                    <th class="p-4 text-left font-semibold border-b-2 border-slate-100">Full name</th>
+                    <th class="p-4 text-left font-semibold border-b-2 border-slate-100">Type</th>
+                    <th class="p-4 text-left font-semibold border-b-2 border-slate-100">Date</th>
+                    <th class="p-4 text-center font-semibold border-b-2 border-slate-100" colspan="3">Actions</th>
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody class="bg-white">
 
                 {% for form in my_forms %}
 
-                <tr class="text-slate-600 border-b border-slate-100">
+                <tr class="text-slate-600 border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
 
-                    <td class="p-3">{{ form.id }}</td>
+                    <td class="p-4 border-b border-slate-100">{{ form.id }}</td>
 
-                    <td class="p-3">{{ form.collaborateur.corporate_id }}</td>
+                    <td class="p-4 border-b border-slate-100">{{ form.collaborateur.corporate_id }}</td>
 
 
-                    <td class="p-3">
+                    <td class="p-4 border-b border-slate-100">
                         {{ form.collaborateur.first_name }} {{ form.collaborateur.family_name }}
                     </td>
 
-                    <td class="p-3">{{ form.type_absence }}</td>
+                    <td class="p-4 border-b border-slate-100">{{ form.type_absence }}</td>
 
-                    <td class="p-3">{{ form.created_at }}</td>
+                    <td class="p-4 border-b border-slate-100">{{ form.created_at|date:"d/m/Y H:i" }}</td>
 
-                 <td class="p-3 text-center">
+                 <td class="p-4 text-center border-b border-slate-100">
                     <a href="{% url 'form_detail' form.id %}">
-                        <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-300 hover:bg-blue-950 
+                        <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-200 hover:bg-blue-900 
                                     hover:text-white  transition-all duration-300 
                                     hover:shadow-lg hover:scale-110">
                             <i class="fa-solid fa-eye text-sm"></i>
@@ -104,9 +101,9 @@ Manager Home
                     </a>
                 </td>
 
-                <td class="p-3 text-center">
+                <td class="p-4 text-center border-b border-slate-100">
                     <button >
-                        <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-300 hover:bg-amber-500
+                        <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-200 hover:bg-amber-500
                                     hover:text-white  transition-all duration-300 
                                       hover:shadow-lg hover:scale-110">
                             <i class="fa-solid fa-pen text-sm"></i>
@@ -114,11 +111,11 @@ Manager Home
                     </button>
                 </td>
 
-                <td class="p-3 text-center">
-                    <form action="{% url 'delete_form' form.id %}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce formulaire ?');">
+                <td class="p-4 text-center border-b border-slate-100">
+                    <form action="{% url 'delete_form' form.id %}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce formulaire ?');" class="m-0">
                         {% csrf_token %}
                         <button type="submit">
-                            <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-300 hover:bg-red-800
+                            <div class="flex justify-center items-center w-8 h-8 rounded-lg bg-slate-200 hover:bg-red-700
                                         hover:text-white  transition-all duration-300 
                                         hover:shadow-lg hover:scale-110">
                                 <i class="fa-solid fa-trash text-sm"></i>
@@ -135,15 +132,18 @@ Manager Home
 
         </table>
 
-         
-
     </div>
    
 
 </div>
- <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Se déconnecter</button>
+ <div class="mt-6 flex justify-end">
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="text-slate-500 hover:text-red-600 transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Se déconnecter
+        </button>
     </form>
+ </div>
 </div>
 {% endblock %}
